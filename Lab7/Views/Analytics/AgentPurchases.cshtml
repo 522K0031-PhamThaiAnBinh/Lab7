@@ -1,0 +1,36 @@
+﻿<!-- Views/Analytics/AgentPurchases.cshtml -->
+@model IEnumerable<Lab7.Models.Order>
+
+<h2>Agent Purchases</h2>
+
+@using (Html.BeginForm("AgentPurchases", "Analytics", FormMethod.Get))
+{
+    <div class="form-group">
+        @Html.DropDownList("agentId", (SelectList)ViewBag.AgentID, "All Agents", new { @class = "form-control", onchange = "this.form.submit();" })
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>Order Date</th>
+        <th>Agent</th>
+        <th>Items</th>
+        <th>Total Amount</th>
+        <th>Action</th>
+    </tr>
+    @foreach (var order in Model)
+    {
+        <tr>
+            <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+            <td>@order.Agent.AgentName</td>
+            <td>
+                @string.Join(", ", order.OrderDetails.Select(od =>
+                    $"{od.Item.ItemName} (x{od.Quantity})"))
+            </td>
+            <td>@order.OrderDetails.Sum(od => od.Quantity * od.UnitAmount).ToString("C")</td>
+            <td>
+                @Html.ActionLink("View Report", "OrderReport", "Report", new { id = order.OrderID }, new { target = "_blank" })
+            </td>
+        </tr>
+    }
+</table>

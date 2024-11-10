@@ -1,0 +1,20 @@
+﻿<!-- Views/Analytics/BestItems.cshtml -->
+@model IEnumerable<Lab7.Models.ViewModels.BestItemViewModel>
+
+<h2>Best Selling Items</h2>
+
+<table class="table">
+    <tr>
+        <th>Item Name</th>
+        <th>Total Quantity Sold</th>
+        <th>Total Revenue</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Item.ItemName</td>
+            <td>@item.TotalQuantity</td>
+            <td>@item.TotalRevenue.ToString("C")</td>
+        </tr>
+    }
+</table>

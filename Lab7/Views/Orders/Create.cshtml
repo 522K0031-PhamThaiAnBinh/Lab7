@@ -1,0 +1,50 @@
+﻿@model Lab7.Models.Order
+
+@{
+    ViewBag.Title = "Create Order";
+}
+
+<h2>Create New Order</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.AgentID, "Agent")
+        @Html.DropDownListFor(m => m.AgentID, (SelectList)ViewBag.AgentID, "Select Agent", new { @class = "form-control" })
+    </div>
+
+    <div id="orderItems">
+        <div class="order-item form-group">
+            <h4>Order Items</h4>
+            <div class="form-group">
+                @Html.DropDownList("ItemID", (SelectList)ViewBag.ItemID, "Select Item", new { @class = "form-control item-select" })
+                <input type="number" class="form-control quantity" placeholder="Quantity" />
+                <input type="number" class="form-control unit-amount" placeholder="Unit Amount" />
+                <button type="button" class="btn btn-danger remove-item">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="addItem" class="btn btn-info">Add Another Item</button>
+    <input type="submit" value="Create Order" class="btn btn-primary" />
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#addItem").click(function () {
+                var itemHtml = $(".order-item:first").clone();
+                itemHtml.find("input").val("");
+                $("#orderItems").append(itemHtml);
+            });
+
+            $(document).on("click", ".remove-item", function () {
+                if ($(".order-item").length > 1) {
+                    $(this).closest(".order-item").remove();
+                }
+            });
+        });
+    </script>
+}

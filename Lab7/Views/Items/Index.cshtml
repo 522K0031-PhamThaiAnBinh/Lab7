@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Lab7.Models.Item>
+
+@{
+    ViewBag.Title = "Items";
+}
+
+<h2>Items List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.ItemName)</th>
+        <th>@Html.DisplayNameFor(model => model.Size)</th>
+        <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.ItemName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Size)</td>
+            <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ItemID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ItemID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ItemID })
+            </td>
+        </tr>
+    }
+</table>

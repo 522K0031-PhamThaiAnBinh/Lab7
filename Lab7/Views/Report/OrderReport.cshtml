@@ -1,0 +1,51 @@
+﻿<!-- Views/Report/OrderReport.cshtml -->
+using System.Data.Entity; // For .Include()
+@model Lab7.Models.Order
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Report</h1>
+    <h3>Order ID: @Model.OrderID</h3>
+    <h3>Date: @Model.OrderDate.ToString("dd/MM/yyyy")</h3>
+    <h3>Agent: @Model.Agent.AgentName</h3>
+
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Unit Amount</th>
+            <th>Total</th>
+        </tr>
+        @foreach (var detail in Model.OrderDetails)
+        {
+            <tr>
+                <td>@detail.Item.ItemName</td>
+                <td>@detail.Quantity</td>
+                <td>@detail.UnitAmount.ToString("C")</td>
+                <td>@((detail.Quantity * detail.UnitAmount).ToString("C"))</td>
+            </tr>
+        }
+    </table>
+
+    <h3>Total Amount: @Model.OrderDetails.Sum(od => od.Quantity * od.UnitAmount).ToString("C")</h3>
+</body>
+</html>
