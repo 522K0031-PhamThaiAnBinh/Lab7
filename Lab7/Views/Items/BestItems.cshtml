@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Lab7.Models.Item>
+
+<h2>Best Items</h2>
+<table class="table">
+    <tr>
+        <th>Item Name</th>
+        <th>Order Count</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ItemName</td>
+            <td>@item.OrderCount</td>
+        </tr>
+    }
+</table>

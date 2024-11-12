@@ -17,6 +17,8 @@ namespace Lab7.Models
         [Display(Name = "Unit Price")]
         [DataType(DataType.Currency)]
         public decimal UnitPrice { get; set; }
+        public int OrderCount { get; set; }
+
 
         // Navigation property
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

@@ -20,6 +20,14 @@ namespace Lab7.Controllers
             return View(db.Items.ToList());
         }
 
+        // GET: BestItems
+        public ActionResult BestItems()
+        {
+            // Get the top 10 most ordered items
+            var bestItems = db.Items.OrderByDescending(i => i.OrderCount).Take(10).ToList();
+            return View(bestItems);
+        }
+
         // GET: Items/Details/5
         public ActionResult Details(int? id)
         {

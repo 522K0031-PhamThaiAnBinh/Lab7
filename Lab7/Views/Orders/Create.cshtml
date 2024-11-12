@@ -19,9 +19,14 @@
         <div class="order-item form-group">
             <h4>Order Items</h4>
             <div class="form-group">
-                @Html.DropDownList("ItemID", (SelectList)ViewBag.ItemID, "Select Item", new { @class = "form-control item-select" })
-                <input type="number" class="form-control quantity" placeholder="Quantity" />
-                <input type="number" class="form-control unit-amount" placeholder="Unit Amount" />
+                <select name="orderDetails[0].ItemID" class="form-control item-select">
+                    <option value="">Select Item</option>
+                    @foreach (var item in (SelectList)ViewBag.ItemID)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <input type="number" name="orderDetails[0].Quantity" class="form-control quantity" placeholder="Quantity" min="1" required />
                 <button type="button" class="btn btn-danger remove-item">Remove</button>
             </div>
         </div>
@@ -34,15 +39,45 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            var itemIndex = 0;
+
             $("#addItem").click(function () {
-                var itemHtml = $(".order-item:first").clone();
-                itemHtml.find("input").val("");
-                $("#orderItems").append(itemHtml);
+                itemIndex++;
+                var newItem = $(".order-item:first").clone();
+
+                // Update the names of the form elements
+                newItem.find(".item-select").attr("name", "orderDetails[" + itemIndex + "].ItemID");
+                newItem.find(".quantity").attr("name", "orderDetails[" + itemIndex + "].Quantity");
+
+                // Clear the values
+                newItem.find("select").val("");
+                newItem.find("input").val("");
+
+                $("#orderItems").append(newItem);
             });
 
             $(document).on("click", ".remove-item", function () {
                 if ($(".order-item").length > 1) {
                     $(this).closest(".order-item").remove();
+                }
+            });
+
+            // Validate before form submission
+            $("form").submit(function (e) {
+                var isValid = true;
+                $(".order-item").each(function () {
+                    var itemId = $(this).find(".item-select").val();
+                    var quantity = $(this).find(".quantity").val();
+
+                    if (!itemId || !quantity || quantity < 1) {
+                        isValid = false;
+                        return false;
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert("Please fill in all required fields with valid values");
                 }
             });
         });

@@ -17,15 +17,17 @@ namespace Lab7.Controllers
         {
             var bestItems = db.OrderDetails
                 .Include(od => od.Item)
-                .GroupBy(od => od.ItemID)
+                .Include(od => od.Order)
+                .GroupBy(od => new { od.ItemID, od.Item.ItemName })
                 .Select(g => new BestItemViewModel
                 {
-                    Item = g.FirstOrDefault().Item,
+                    // Use FirstOrDefault to safely get the first item in the group
+                    Item = g.FirstOrDefault().Item, // or g.First() if you expect at least one element in each group
                     TotalQuantity = g.Sum(od => od.Quantity),
                     TotalRevenue = g.Sum(od => od.Quantity * od.UnitAmount),
-                    OrderCount = g.Count()  // Count how many orders this item appears in
+                    OrderCount = g.Select(od => od.OrderID).Distinct().Count() // Count distinct orders
                 })
-                .OrderByDescending(x => x.OrderCount)  // Order by number of orders instead of quantity
+                .OrderByDescending(x => x.TotalRevenue) // Or OrderByDescending(x => x.OrderCount) depending on your preference
                 .Take(10)
                 .ToList();
 

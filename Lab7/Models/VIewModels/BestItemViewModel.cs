@@ -10,6 +10,6 @@ namespace Lab7.Models.ViewModels
         public Item Item { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalRevenue { get; set; }
-        public int OrderCount { get; set; }  // Added to track number of orders
+        public int OrderCount { get; set; }
     }
 }
